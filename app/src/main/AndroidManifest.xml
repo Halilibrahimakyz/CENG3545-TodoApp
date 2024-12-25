@@ -14,15 +14,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TodoApp">
 
-        <!-- Login Activity set as launcher activity -->
+        <!-- Splash Activity set as launcher activity -->
         <activity
-            android:name=".views.LoginActivity"
-            android:exported="true">
+            android:name=".views.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.TodoApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".views.LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.TodoApp" />
 
         <activity
             android:name=".views.RegisterActivity"
@@ -37,6 +43,10 @@
             android:name=".views.AddToDoActivity"
             android:label="New ToDo"
             android:parentActivityName=".views.MainActivity" />
+
+        <activity
+            android:name=".views.ProfileActivity"
+            android:exported="false" />
 
     </application>
 </manifest>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Filtrele"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Öncelik"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <RadioGroup
+        android:id="@+id/priorityGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/allPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tümü"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/lowPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Düşük"/>
+
+        <RadioButton
+            android:id="@+id/mediumPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Orta"/>
+
+        <RadioButton
+            android:id="@+id/highPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yüksek"/>
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Durum"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <RadioGroup
+        android:id="@+id/statusGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/allStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tümü"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/completedStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tamamlananlar"/>
+
+        <RadioButton
+            android:id="@+id/uncompletedStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tamamlanmayanlar"/>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/applyFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Uygula"
+        android:background="@drawable/button_background"
+        android:textColor="@color/white"/>
+
+</LinearLayout> 

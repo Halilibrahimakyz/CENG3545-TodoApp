@@ -3,13 +3,17 @@ package com.example.todoapp.controllers;
 import com.example.todoapp.callbacks.AuthCallback;
 import com.example.todoapp.models.User;
 import com.example.todoapp.services.AuthService;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AuthController {
     private final AuthService authService;
+    private FirebaseAuth mAuth;
 
     public AuthController() {
         this.authService = new AuthService();
+        mAuth = FirebaseAuth.getInstance();
     }
 
     public void handleLogin(String email, String password, AuthCallback callback) {
@@ -44,6 +48,10 @@ public class AuthController {
     }
 
     public void handleLogout() {
-        authService.logout();
+        mAuth.signOut();
+    }
+
+    public FirebaseUser getCurrentUser() {
+        return mAuth.getCurrentUser();
     }
 } 

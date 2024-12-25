@@ -3,20 +3,33 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
-    <FrameLayout
-        android:id="@+id/container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addTodoFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <include layout="@layout/toolbar_main"/>
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/addButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="@string/add_todo"
-        app:srcCompat="@android:drawable/ic_input_add"/>
+        android:background="@drawable/fab_background"
+        android:src="@android:drawable/ic_input_add"
+        android:tint="@android:color/white"
+        android:elevation="6dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

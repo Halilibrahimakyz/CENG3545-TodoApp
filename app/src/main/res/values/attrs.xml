@@ -1,0 +1,6 @@
+<resources>
+    <attr name="colorOnPrimary" format="color" />
+    <attr name="colorOnBackground" format="color" />
+    <attr name="textAppearanceMedium" format="reference|dimension" />
+    <!-- Diğer özel öznitelikler -->
+</resources> 

@@ -7,11 +7,13 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.todoapp.R;
 import com.example.todoapp.controllers.AuthController;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
     private AuthController authController;
-    private FloatingActionButton addTodoFab;
+    private ImageButton addButton;
+    private ImageButton profileButton;
+    private ImageButton filterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +32,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        addTodoFab = findViewById(R.id.addTodoFab);
+        addButton = findViewById(R.id.addButton);
+        profileButton = findViewById(R.id.profileButton);
+        filterButton = findViewById(R.id.filterButton);
     }
 
     private void setupListeners() {
-        addTodoFab.setOnClickListener(v -> 
-            startActivity(new Intent(this, AddToDoActivity.class)));
+        addButton.setOnClickListener(v -> {
+            AddToDoBottomSheet bottomSheet = new AddToDoBottomSheet();
+            bottomSheet.show(getSupportFragmentManager(), "addTodoBottomSheet");
+        });
+
+        profileButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        filterButton.setOnClickListener(v -> {
+            ToDoListFragment fragment = (ToDoListFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.container);
+            if (fragment != null) {
+                fragment.showFilterDialog();
+            }
+        });
     }
 
     @Override

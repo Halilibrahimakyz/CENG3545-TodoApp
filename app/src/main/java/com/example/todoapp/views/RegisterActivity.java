@@ -1,6 +1,8 @@
 package com.example.todoapp.views;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -8,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.todoapp.R;
 import com.example.todoapp.callbacks.AuthCallback;
 import com.example.todoapp.controllers.AuthController;
+import android.widget.TextView;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText nameInput;
@@ -19,11 +22,21 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_TodoApp);
         setContentView(R.layout.activity_register);
 
         authController = new AuthController();
         initViews();
         setupListeners();
+
+        TextView loginText = findViewById(R.id.loginText);
+        loginText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initViews() {

@@ -5,8 +5,8 @@
     <string name="add_todo">Add new task</string>
     
     <string-array name="priority_levels">
-        <item>Low Priority</item>
-        <item>Medium Priority</item>
-        <item>High Priority</item>
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
     </string-array>
 </resources>
