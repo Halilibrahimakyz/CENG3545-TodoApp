@@ -4,16 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.todoapp.R;
 import com.example.todoapp.controllers.AuthController;
-import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
     private AuthController authController;
     private ImageButton addButton;
     private ImageButton profileButton;
     private ImageButton filterButton;
+    private ImageButton completedButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         addButton = findViewById(R.id.addButton);
         profileButton = findViewById(R.id.profileButton);
         filterButton = findViewById(R.id.filterButton);
+        completedButton = findViewById(R.id.completedButton);
     }
 
     private void setupListeners() {
@@ -50,10 +52,15 @@ public class MainActivity extends AppCompatActivity {
 
         filterButton.setOnClickListener(v -> {
             ToDoListFragment fragment = (ToDoListFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.container);
+                    .findFragmentById(R.id.container);
             if (fragment != null) {
                 fragment.showFilterDialog();
             }
+        });
+
+        completedButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CompletedTodosActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -73,4 +80,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-} 
+}

@@ -19,22 +19,18 @@ public class AuthController {
     public void handleLogin(String email, String password, AuthCallback callback) {
         authService.login(email, password)
                 .addOnSuccessListener(authResult -> {
-                    callback.onSuccess("Giriş başarılı!");
+                    callback.onSuccess("Login successful!");
                 })
                 .addOnFailureListener(e -> {
-                    callback.onError("Giriş başarısız: " + e.getMessage());
+                    callback.onError("Login failed: " + e.getMessage());
                 });
     }
 
-    public void handleRegister(String email, String password, String name, AuthCallback callback) {
+    public void handleRegister(String email, String password, AuthCallback callback) {
         authService.register(email, password)
-                .addOnSuccessListener(authResult -> {
-                    String uid = authResult.getUser().getUid();
-                    User newUser = new User(uid, email, name, password);
-                    saveUserToFirestore(newUser, callback);
-                })
+                .addOnSuccessListener(authResult -> callback.onSuccess("Registration successful!"))
                 .addOnFailureListener(e -> {
-                    callback.onError("Kayıt başarısız: " + e.getMessage());
+                    callback.onError("Registration failed: " + e.getMessage());
                 });
     }
 
@@ -43,8 +39,8 @@ public class AuthController {
                 .collection("users")
                 .document(user.getUid())
                 .set(user)
-                .addOnSuccessListener(aVoid -> callback.onSuccess("Kayıt başarılı!"))
-                .addOnFailureListener(e -> callback.onError("Kullanıcı bilgileri kaydedilemedi: " + e.getMessage()));
+                .addOnSuccessListener(aVoid -> callback.onSuccess("Registration successful!"))
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
     public void handleLogout() {

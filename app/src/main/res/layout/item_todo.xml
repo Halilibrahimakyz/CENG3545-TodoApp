@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@id/todoCheckbox"
-            tools:text="Todo Başlığı"/>
+            tools:text="Todo Title"/>
 
         <CheckBox
             android:id="@+id/todoCheckbox"
@@ -51,7 +51,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/todoTitle"
-            tools:text="Todo açıklaması burada yer alacak"/>
+            tools:text="Todo description here"/>
 
         <TextView
             android:id="@+id/todoDueDate"

@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Yeni Todo Ekle"
+        android:text="Add New Todo"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -19,14 +19,14 @@
         android:id="@+id/todoTitleInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Todo başlığı"
+        android:hint="Todo Title"
         android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/todoDescriptionInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Açıklama"
+        android:hint="Description"
         android:layout_marginBottom="16dp"
         android:minLines="3"
         android:gravity="top"/>
@@ -34,7 +34,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Öncelik:"
+        android:text="Priority:"
         android:layout_marginBottom="8dp"/>
 
     <Spinner
@@ -47,7 +47,7 @@
         android:id="@+id/datePickerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Son Tarih Seç"
+        android:text="Select Due Date"
         android:background="@drawable/button_background"
         android:textColor="@color/white"
         android:layout_marginBottom="16dp"/>
@@ -58,6 +58,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_background"
         android:textColor="@color/white"
-        android:text="Kaydet"/>
+        android:text="Save"/>
 
 </LinearLayout> 

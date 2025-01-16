@@ -81,7 +81,7 @@ public class AddToDoBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void setupSpinner() {
-        String[] priorities = {"Düşük", "Orta", "Yüksek"};
+        String[] priorities = {"Low", "Medium", "High"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), 
             android.R.layout.simple_spinner_item, priorities);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -116,17 +116,16 @@ public class AddToDoBottomSheet extends BottomSheetDialogFragment {
         int priority = prioritySpinner.getSelectedItemPosition();
         
         if (title.isEmpty()) {
-            titleInput.setError("Başlık gerekli");
+            titleInput.setError("Title is required");
             return;
         }
 
         if (selectedDate == null) {
-            Toast.makeText(requireContext(), "Lütfen bir tarih seçin", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Please select a date", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (todoId != null) {
-            // Güncelleme
             db.collection("todos")
                 .document(todoId)
                 .update(
@@ -137,23 +136,22 @@ public class AddToDoBottomSheet extends BottomSheetDialogFragment {
                     "updatedAt", new Timestamp(new Date())
                 )
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(requireContext(), "Todo güncellendi", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Todo updated", Toast.LENGTH_SHORT).show();
                     dismiss();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(requireContext(), "Hata: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
         } else {
-            // Yeni ekleme
             ToDo todo = new ToDo(title, description, auth.getCurrentUser().getUid(), selectedDate, priority);
             db.collection("todos")
                 .add(todo)
                 .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(requireContext(), "Todo eklendi", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Todo added", Toast.LENGTH_SHORT).show();
                     dismiss();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(requireContext(), "Hata: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
         }
     }

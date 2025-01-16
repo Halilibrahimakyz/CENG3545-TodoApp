@@ -2,9 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.todoapp">
 
-    <!-- Required permissions for Firebase -->
+    <!-- Gerekli İzinler -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:allowBackup="true"
@@ -47,6 +49,9 @@
         <activity
             android:name=".views.ProfileActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".views.CompletedTodosActivity" />
 
     </application>
 </manifest>

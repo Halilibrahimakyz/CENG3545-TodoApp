@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Filtrele"
+        android:text="Filter"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
@@ -17,7 +17,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Öncelik"
+        android:text="Priority"
         android:textStyle="bold"
         android:layout_marginBottom="8dp"/>
 
@@ -31,32 +31,32 @@
             android:id="@+id/allPriority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tümü"
+            android:text="All"
             android:checked="true"/>
 
         <RadioButton
             android:id="@+id/lowPriority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Düşük"/>
+            android:text="Low"/>
 
         <RadioButton
             android:id="@+id/mediumPriority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Orta"/>
+            android:text="Medium"/>
 
         <RadioButton
             android:id="@+id/highPriority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Yüksek"/>
+            android:text="High"/>
     </RadioGroup>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Durum"
+        android:text="Status"
         android:textStyle="bold"
         android:layout_marginBottom="8dp"/>
 
@@ -70,27 +70,27 @@
             android:id="@+id/allStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tümü"
+            android:text="All"
             android:checked="true"/>
 
         <RadioButton
             android:id="@+id/completedStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tamamlananlar"/>
+            android:text="Completed"/>
 
         <RadioButton
             android:id="@+id/uncompletedStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tamamlanmayanlar"/>
+                android:text="Uncompleted"/>
     </RadioGroup>
 
     <Button
         android:id="@+id/applyFilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Uygula"
+        android:text="Apply"
         android:background="@drawable/button_background"
         android:textColor="@color/white"/>
 

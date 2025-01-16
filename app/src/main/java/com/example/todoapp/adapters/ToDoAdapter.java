@@ -20,10 +20,15 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
     private List<ToDo> todos = new ArrayList<>();
     private final OnToDoClickListener listener;
     private final FirebaseFirestore db;
+    private boolean isCheckboxClickable = true;
 
     public ToDoAdapter(OnToDoClickListener listener) {
         this.listener = listener;
         this.db = FirebaseFirestore.getInstance();
+    }
+
+    public void setCheckboxClickable(boolean clickable) {
+        this.isCheckboxClickable = clickable;
     }
 
     public void setTodos(List<ToDo> todos) {
@@ -74,66 +79,66 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
             dueDateTextView = itemView.findViewById(R.id.todoDueDate);
             checkBox = itemView.findViewById(R.id.todoCheckbox);
             dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            
+
             checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (!isUserAction) return;
-                
+                if (!isUserAction || !isCheckboxClickable) return;
+
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     ToDo todo = todos.get(position);
                     todo.setCompleted(isChecked);
-                    
+
                     db.collection("todos")
-                        .document(todo.getId())
-                        .update(
-                            "completed", isChecked,
-                            "updatedAt", todo.getUpdatedAt()
-                        )
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(itemView.getContext(), 
-                                "Görev durumu güncellendi", Toast.LENGTH_SHORT).show();
-                        })
-                        .addOnFailureListener(e -> {
-                            todo.setCompleted(!isChecked);
-                            checkBox.setChecked(!isChecked);
-                            Toast.makeText(itemView.getContext(), 
-                                "Hata: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        });
+                            .document(todo.getId())
+                            .update(
+                                    "completed", isChecked,
+                                    "updatedAt", todo.getUpdatedAt()
+                            )
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(itemView.getContext(),
+                                        "Todo is Updated", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                todo.setCompleted(!isChecked);
+                                checkBox.setChecked(!isChecked);
+                                Toast.makeText(itemView.getContext(),
+                                        "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
                 }
             });
         }
 
         void bind(ToDo todo) {
             if (todo == null) return;
-            
+
             isUserAction = false;
-            
+
             if (titleTextView != null) {
                 titleTextView.setText(todo.getTitle());
             }
-            
+
             if (descriptionTextView != null) {
                 descriptionTextView.setText(todo.getDescription());
             }
-            
+
             if (dueDateTextView != null && todo.getDueDate() != null) {
-                dueDateTextView.setText("Son Tarih: " + dateFormat.format(todo.getDueDate()));
+                dueDateTextView.setText("Due Date: " + dateFormat.format(todo.getDueDate()));
             }
-            
+
             if (checkBox != null) {
                 checkBox.setChecked(todo.isCompleted());
+                checkBox.setEnabled(isCheckboxClickable);
             }
-            
-            // Önceliğe göre arka plan rengini ayarla
+
             int backgroundColor;
             switch (todo.getPriority()) {
-                case 0: // Düşük
+                case 0:
                     backgroundColor = itemView.getContext().getColor(R.color.priority_low);
                     break;
-                case 1: // Orta
+                case 1:
                     backgroundColor = itemView.getContext().getColor(R.color.priority_medium);
                     break;
-                case 2: // Yüksek
+                case 2:
                     backgroundColor = itemView.getContext().getColor(R.color.priority_high);
                     break;
                 default:
@@ -141,8 +146,8 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
                     break;
             }
             ((androidx.cardview.widget.CardView) itemView).setCardBackgroundColor(backgroundColor);
-            
+
             isUserAction = true;
         }
     }
-} 
+}

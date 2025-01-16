@@ -19,7 +19,6 @@ public class ToDo {
     private String userId;
 
     public ToDo() {
-        // Firestore için boş constructor gerekli
         this.createdAt = Timestamp.now();
         this.updatedAt = Timestamp.now();
         this.isCompleted = false;
@@ -36,7 +35,6 @@ public class ToDo {
         this.updatedAt = Timestamp.now();
     }
 
-    // Getter ve Setter metodları
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     
@@ -82,13 +80,12 @@ public class ToDo {
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
 
-    // Öncelik seviyelerini string olarak almak için yardımcı metod
     public String getPriorityText() {
         switch(priority) {
-            case 0: return "Düşük";
-            case 1: return "Orta";
-            case 2: return "Yüksek";
-            default: return "Belirsiz";
+            case 0: return "Low";
+            case 1: return "Medium";
+            case 2: return "High";
+            default: return "Unknown";
         }
     }
 } 

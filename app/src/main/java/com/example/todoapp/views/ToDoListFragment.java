@@ -1,6 +1,10 @@
 package com.example.todoapp.views;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +34,11 @@ public class ToDoListFragment extends Fragment implements ToDoAdapter.OnToDoClic
     private ToDoAdapter adapter;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
-    private int selectedPriority = -1; // -1 tümü
-    private int selectedStatus = -1; // -1 tümü
+    private int selectedPriority = -1;
+    private int selectedStatus = -1;
+    private HandlerThread backgroundThread;
+    private Handler backgroundHandler;
+    private Handler mainHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,10 +52,22 @@ public class ToDoListFragment extends Fragment implements ToDoAdapter.OnToDoClic
         
         adapter = new ToDoAdapter(this);
         recyclerView.setAdapter(adapter);
+
+        // Initialize handlers
+        backgroundThread = new HandlerThread("TodoProcessingThread");
+        backgroundThread.start();
+        backgroundHandler = new Handler(backgroundThread.getLooper());
+        mainHandler = new Handler(Looper.getMainLooper());
         
         loadTodos();
         
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        backgroundThread.quitSafely();
     }
 
     private void loadTodos() {
@@ -59,36 +78,40 @@ public class ToDoListFragment extends Fragment implements ToDoAdapter.OnToDoClic
             .addSnapshotListener((value, error) -> {
                 if (error != null) return;
 
-                ArrayList<ToDo> todoList = new ArrayList<>();
                 if (value != null) {
-                    for (DocumentSnapshot doc : value.getDocuments()) {
-                        ToDo todo = doc.toObject(ToDo.class);
-                        if (todo != null) {
-                            todo.setId(doc.getId());
-                            
-                            // Filtreleme
-                            boolean addTodo = true;
-                            
-                            // Öncelik filtresi
-                            if (selectedPriority != -1 && todo.getPriority() != selectedPriority) {
-                                addTodo = false;
-                            }
-                            
-                            // Durum filtresi
-                            if (selectedStatus != -1) {
-                                boolean isCompleted = selectedStatus == 1;
-                                if (todo.isCompleted() != isCompleted) {
+                    // Process todos in background thread
+                    backgroundHandler.post(() -> {
+                        ArrayList<ToDo> todoList = new ArrayList<>();
+                        for (DocumentSnapshot doc : value.getDocuments()) {
+                            ToDo todo = doc.toObject(ToDo.class);
+                            if (todo != null) {
+                                todo.setId(doc.getId());
+                                
+                                boolean addTodo = true;
+                                
+                                if (selectedPriority != -1 && todo.getPriority() != selectedPriority) {
                                     addTodo = false;
                                 }
-                            }
-                            
-                            if (addTodo) {
-                                todoList.add(todo);
+                                
+                                if (selectedStatus != -1) {
+                                    boolean isCompleted = selectedStatus == 1;
+                                    if (todo.isCompleted() != isCompleted) {
+                                        addTodo = false;
+                                    }
+                                }
+                                
+                                if (addTodo) {
+                                    todoList.add(todo);
+                                }
                             }
                         }
-                    }
+
+                        // Update UI in main thread
+                        mainHandler.post(() -> {
+                            adapter.setTodos(todoList);
+                        });
+                    });
                 }
-                adapter.setTodos(todoList);
             });
     }
 
@@ -113,7 +136,7 @@ public class ToDoListFragment extends Fragment implements ToDoAdapter.OnToDoClic
         priorityText.setText(todo.getPriorityText());
         if (todo.getDueDate() != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            dueDateText.setText("Son Tarih: " + dateFormat.format(todo.getDueDate()));
+            dueDateText.setText("Due Date: " + dateFormat.format(todo.getDueDate()));
         }
 
         AlertDialog dialog = builder.setView(view).create();
@@ -147,19 +170,19 @@ public class ToDoListFragment extends Fragment implements ToDoAdapter.OnToDoClic
 
     private void deleteTodo(ToDo todo) {
         new AlertDialog.Builder(requireContext())
-            .setTitle("Todo'yu Sil")
-            .setMessage("Bu todo'yu silmek istediğinizden emin misiniz?")
-            .setPositiveButton("Sil", (dialog, which) -> {
+            .setTitle("Delete Todo")
+            .setMessage("Are you sure you want to delete this todo?")
+            .setPositiveButton("Delete", (dialog, which) -> {
                 FirebaseFirestore.getInstance()
                     .collection("todos")
                     .document(todo.getId())
                     .delete()
                     .addOnSuccessListener(aVoid -> 
-                        Toast.makeText(requireContext(), "Todo silindi", Toast.LENGTH_SHORT).show())
+                        Toast.makeText(requireContext(), "Todo deleted", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e -> 
-                        Toast.makeText(requireContext(), "Hata: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        Toast.makeText(requireContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             })
-            .setNegativeButton("İptal", null)
+            .setNegativeButton("Cancel", null)
             .show();
     }
 
@@ -171,7 +194,6 @@ public class ToDoListFragment extends Fragment implements ToDoAdapter.OnToDoClic
         RadioGroup statusGroup = view.findViewById(R.id.statusGroup);
         Button applyButton = view.findViewById(R.id.applyFilter);
         
-        // Önceki seçimleri ayarla
         if (selectedPriority != -1) {
             ((RadioButton) priorityGroup.getChildAt(selectedPriority + 1)).setChecked(true);
         }
@@ -185,18 +207,16 @@ public class ToDoListFragment extends Fragment implements ToDoAdapter.OnToDoClic
             int priorityId = priorityGroup.getCheckedRadioButtonId();
             int statusId = statusGroup.getCheckedRadioButtonId();
             
-            // Öncelik filtresini ayarla
             if (priorityId == R.id.allPriority) selectedPriority = -1;
             else if (priorityId == R.id.lowPriority) selectedPriority = 0;
             else if (priorityId == R.id.mediumPriority) selectedPriority = 1;
             else if (priorityId == R.id.highPriority) selectedPriority = 2;
             
-            // Durum filtresini ayarla
             if (statusId == R.id.allStatus) selectedStatus = -1;
             else if (statusId == R.id.completedStatus) selectedStatus = 1;
             else if (statusId == R.id.uncompletedStatus) selectedStatus = 0;
             
-            loadTodos(); // Filtrelenmiş listeyi yükle
+            loadTodos();
             dialog.dismiss();
         });
         
